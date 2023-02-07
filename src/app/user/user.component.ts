@@ -1,3 +1,4 @@
+import { UserService } from './user.service';
 import { User } from './../user';
 import { Component, OnInit } from '@angular/core';
 import { collection, Firestore, getDocs, doc, deleteDoc, query, startAt, limit, orderBy, endAt } from '@angular/fire/firestore';
@@ -13,7 +14,7 @@ export class UserComponent implements OnInit {
   lastVisible: any = null
   dbInstance = collection(this.firestore, 'users')
 
-  constructor(private firestore: Firestore) { }
+  constructor(private firestore: Firestore, private userService: UserService) { }
 
   ngOnInit(): void {
     this.initData()
@@ -60,15 +61,8 @@ export class UserComponent implements OnInit {
   }
 
   deleteUser(id: string) {
-    let docRef = doc(this.firestore, 'users', id)
-    deleteDoc(docRef)
-      .then(() => {
-        alert('Delete succeed')
-        this.initData()
-      })
-      .catch(error => {
-        alert('Delete failed')
-      })
+    this.userService.deleteUser(id)
+    this.initData()
   }
 
 }

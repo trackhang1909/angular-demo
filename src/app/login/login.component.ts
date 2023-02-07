@@ -1,8 +1,6 @@
+import { UserService } from './../user/user.service';
 import { User } from './../user';
 import { Component, OnInit } from '@angular/core';
-import { collection, doc, Firestore, getDoc, getDocs, where } from '@angular/fire/firestore';
-import { query } from '@firebase/firestore';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -18,7 +16,7 @@ export class LoginComponent implements OnInit {
     password: ''
   }
 
-  constructor(private firestore: Firestore, private router: Router) { }
+  constructor(private userService: UserService) { }
 
   ngOnInit(): void {
   }
@@ -28,22 +26,7 @@ export class LoginComponent implements OnInit {
       return
     }
     else {
-      const dbInstance = collection(this.firestore, 'users')
-      const q = query(dbInstance, where('email', '==', this.user.email))
-
-      const querySnapshot = await getDocs(q)
-
-      if (querySnapshot.size > 0) {
-        const qEmail = querySnapshot.docs[0].data()['email']
-        const qPassword = querySnapshot.docs[0].data()['password']
-        if (qEmail == this.user.email && qPassword == this.user.password) {
-          this.router.navigate(['user'])
-          return
-        }
-      }
-
-      alert('Login failed')
-
+      this.userService.checkUser(this.user)
     }
   }
 

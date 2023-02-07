@@ -1,5 +1,5 @@
 <div class="container">
-  <form #resForm="ngForm" (ngSubmit)="hideBtnLogin ? handleUpdate() : handleRegister(resForm)">
+  <form #resForm="ngForm" (ngSubmit)="hideBtnLogin ? handleUpdate(resForm) : handleRegister(resForm)">
     <div class="mb-3">
       <label for="email" class="form-label">Email address</label>
       <input type="email" #email="ngModel" [(ngModel)]="user.email" name="email" class="form-control" id="email" required aria-describedby="emailHelp">

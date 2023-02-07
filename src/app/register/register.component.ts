@@ -1,13 +1,13 @@
+import { UserService } from './../user/user.service';
 import { User } from './../user';
 import { Component, OnInit } from '@angular/core';
-import { collection, addDoc, Firestore, doc, getDoc, updateDoc } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
-  styleUrls: ['../app.component.css']
+  styleUrls: ['../app.component.css'],
 })
 
 export class RegisterComponent implements OnInit {
@@ -22,7 +22,11 @@ export class RegisterComponent implements OnInit {
   hideBtnLogin: boolean = false
   id: string = ''
 
-  constructor(private firestore: Firestore, private router: Router, private route: ActivatedRoute) { }
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    private userService: UserService
+  ) { }
 
   async ngOnInit(): Promise<void> {
     if (this.router.url.includes('register')) {
@@ -34,19 +38,10 @@ export class RegisterComponent implements OnInit {
       this.hideBtnLogin = true
       this.id = this.route.snapshot.paramMap.get('id') || ''
 
-      let docRef = doc(this.firestore, 'users', this.id)
-      const docSnap = await getDoc(docRef)
-
-      if (docSnap.exists()) {
-        this.user = {
-          id: this.id,
-          email: docSnap.data()['email'],
-          name: docSnap.data()['name'],
-          password: ''
-        }
-      } else {
-        console.log("No such document!");
-      }
+      this.userService.getUser(this.id)
+        .then(user => {
+          this.user = user
+        })
     }
   }
 
@@ -55,34 +50,17 @@ export class RegisterComponent implements OnInit {
       return
     }
     else {
-      const dbInstance = collection(this.firestore, 'users')
-      addDoc(dbInstance, {
-        name: this.user.name,
-        email: this.user.email,
-        password: this.user.password
-      })
-        .then(() => {
-          alert('Register succeed')
-        })
-        .catch(error => {
-          alert('Register failed')
-        })
+      this.userService.registerUser(this.user)
     }
   }
 
-  handleUpdate() {
-    let docRef = doc(this.firestore, 'users', this.id)
-    updateDoc(docRef, {
-      email: this.user.email,
-      name: this.user.name,
-      password: this.user.password
-    })
-      .then(() => {
-        this.router.navigate(['user'])
-      })
-      .catch(error => {
-        alert('Update failed')
-      })
+  handleUpdate(form: any) {
+    if (form.invalid) {
+      return
+    }
+    else {
+      this.userService.updateUser(this.id, this.user)
+    }
   }
 
 }
