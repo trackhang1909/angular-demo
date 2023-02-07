@@ -1,0 +1,31 @@
+<div class="container">
+  <form #resForm="ngForm" (ngSubmit)="handleLogin(resForm)">
+    <div class="mb-3">
+      <label for="email" class="form-label">Email address</label>
+      <input type="email" #email="ngModel" [(ngModel)]="user.email" name="email" class="form-control" id="email" required aria-describedby="emailHelp">
+      <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+      <div
+        class="alert alert-danger mt-3"
+        role="alert"
+        *ngIf="(resForm.submitted && !email.touched) || (!email?.valid && (email?.dirty || email?.touched))"
+      >
+        Email is required
+      </div>
+    </div>
+    <div class="mb-3">
+      <label for="password" class="form-label">Password</label>
+      <input type="password" #password="ngModel" [(ngModel)]="user.password" name="password" class="form-control" id="password" required>
+      <div
+        class="alert alert-danger mt-3"
+        role="alert"
+        *ngIf="(resForm.submitted && !password.touched) || (!password?.valid && (password?.dirty || password?.touched))"
+      >
+        Password is required
+      </div>
+    </div>
+    <div class="mb-3 flex-block">
+      <a class="btn btn-secondary" [routerLink]="['/register']" role="button">Register Page</a>
+      <button type="submit" class="btn btn-primary">Login</button>
+    </div>
+  </form>
+</div>

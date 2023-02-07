@@ -1,0 +1,65 @@
+<div class="container">
+  <form #resForm="ngForm" (ngSubmit)="hideBtnLogin ? handleUpdate() : handleRegister(resForm)">
+    <div class="mb-3">
+      <label for="email" class="form-label">Email address</label>
+      <input type="email" #email="ngModel" [(ngModel)]="user.email" name="email" class="form-control" id="email" required aria-describedby="emailHelp">
+      <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+      <div
+        class="alert alert-danger mt-3"
+        role="alert"
+        *ngIf="(!hideBtnLogin && resForm.submitted && !email.touched) || (!email?.valid && (email?.dirty || email?.touched))"
+      >
+        Email is required
+      </div>
+    </div>
+    <div class="mb-3">
+      <label for="name" class="form-label">Name</label>
+      <input type="text" #name="ngModel" [(ngModel)]="user.name" name="name" class="form-control" id="name" required>
+      <div
+        class="alert alert-danger mt-3"
+        role="alert"
+        *ngIf="(!hideBtnLogin && resForm.submitted && !name.touched) || (!name?.valid && (name?.dirty || name?.touched))"
+      >
+        Name is required
+      </div>
+    </div>
+    <div class="mb-3">
+      <label for="password" class="form-label">Password</label>
+      <input type="password" #password="ngModel" [(ngModel)]="user.password" name="password" class="form-control" id="password" required>
+      <div
+        class="alert alert-danger mt-3"
+        role="alert"
+        *ngIf="(resForm.submitted && !password.touched) || (!password?.valid && (password?.dirty || password?.touched))"
+      >
+        Password is required
+      </div>
+    </div>
+    <div class="mb-3">
+      <label for="confirm-password" class="form-label">Confirm password</label>
+      <input
+        type="password"
+        name="confirm-password"
+        class="form-control"
+        id="confirm-password"
+        pattern="{{ user.password }}"
+        #cpass="ngModel"
+        [(ngModel)]="confirmPassword"
+        required
+      >
+      <div
+        class="alert alert-danger mt-3"
+        role="alert"
+        *ngIf="(resForm.submitted && !cpass.touched) || (cpass.errors?.['pattern'] && !cpass?.valid && cpass?.dirty)"
+      >
+        Password and confirm password does not match
+      </div>
+    </div>
+    <div class="mb-3 flex-block">
+      <a *ngIf="!hideBtnLogin; else backUser" class="btn btn-secondary" [routerLink]="['/login']" role="button">Login Page</a>
+      <ng-template #backUser>
+        <a class="btn btn-secondary" [routerLink]="['/user']" role="button">Back</a>
+      </ng-template>
+      <button type="submit" class="btn btn-primary">{{ btnSubmit }}</button>
+    </div>
+  </form>
+</div>

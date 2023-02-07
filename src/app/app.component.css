@@ -1,0 +1,16 @@
+.container {
+  width: 50%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container form {
+  width: 80%;
+}
+
+.flex-block {
+  display: flex;
+  justify-content: space-between;
+}
