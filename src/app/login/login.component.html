@@ -1,5 +1,5 @@
 <div class="container">
-  <form #resForm="ngForm" (ngSubmit)="handleLogin(resForm)">
+  <form #resForm="ngForm" (ngSubmit)="handleLogin()">
     <div class="mb-3">
       <label for="email" class="form-label">Email address</label>
       <input type="email" #email="ngModel" [(ngModel)]="user.email" name="email" class="form-control" id="email" required aria-describedby="emailHelp">
@@ -7,9 +7,9 @@
       <div
         class="alert alert-danger mt-3"
         role="alert"
-        *ngIf="(resForm.submitted && !email.touched) || (!email?.valid && (email?.dirty || email?.touched))"
+        *ngIf="errorField == 'email'"
       >
-        Email is required
+        {{ errorMessage | titlecase }}
       </div>
     </div>
     <div class="mb-3">
@@ -18,9 +18,9 @@
       <div
         class="alert alert-danger mt-3"
         role="alert"
-        *ngIf="(resForm.submitted && !password.touched) || (!password?.valid && (password?.dirty || password?.touched))"
+        *ngIf="errorField == 'password'"
       >
-        Password is required
+        {{ errorMessage | titlecase }}
       </div>
     </div>
     <div class="mb-3 flex-block">

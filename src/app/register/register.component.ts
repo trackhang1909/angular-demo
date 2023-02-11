@@ -3,7 +3,8 @@ import { User } from './../user';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
-
+import { number, object, string } from 'yup';
+import * as yup from "yup";
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
@@ -21,6 +22,14 @@ export class RegisterComponent implements OnInit {
   btnSubmit: string = ''
   hideBtnLogin: boolean = false
   id: string = ''
+  userSchema = object({
+    name: string().required().min(5),
+    email: string().required().email(),
+    password: string().required().min(6),
+    confirmPassword: string().oneOf([yup.ref('password')], 'Passwords must match')
+  })
+  errorField: string = ''
+  errorMessage: string = ''
 
   constructor(
     private router: Router,
@@ -45,13 +54,20 @@ export class RegisterComponent implements OnInit {
     }
   }
 
-  handleRegister(form: any) {
-    if (form.invalid) {
-      return
-    }
-    else {
-      this.userService.registerUser(this.user)
-    }
+  handleRegister() {
+    this.userSchema.validate({
+      ...this.user,
+      confirmPassword: this.confirmPassword
+    })
+      .then(res => {
+        this.errorField = ''
+        this.errorMessage = ''
+        this.userService.registerUser(this.user)
+      })
+      .catch(e => {
+        this.errorField = e.path
+        this.errorMessage = e.message
+      })
   }
 
   handleUpdate(form: any) {

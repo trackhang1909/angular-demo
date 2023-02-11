@@ -7,7 +7,7 @@ import { Component, Input, OnInit, Output, EventEmitter, ViewChild, ElementRef }
   styleUrls: ['./detail.component.css']
 })
 export class DetailComponent implements OnInit {
-  @Input() users!: User[]
+  @Input() users?: User[]
   @Output() deleteUser = new EventEmitter<any>()
   @ViewChild('closeModal') closeModal!: ElementRef
 

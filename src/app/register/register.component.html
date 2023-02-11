@@ -1,5 +1,5 @@
 <div class="container">
-  <form #resForm="ngForm" (ngSubmit)="hideBtnLogin ? handleUpdate(resForm) : handleRegister(resForm)">
+  <form #resForm="ngForm" (ngSubmit)="hideBtnLogin ? handleUpdate(resForm) : handleRegister()">
     <div class="mb-3">
       <label for="email" class="form-label">Email address</label>
       <input type="email" #email="ngModel" [(ngModel)]="user.email" name="email" class="form-control" id="email" required aria-describedby="emailHelp">
@@ -7,9 +7,9 @@
       <div
         class="alert alert-danger mt-3"
         role="alert"
-        *ngIf="(!hideBtnLogin && resForm.submitted && !email.touched) || (!email?.valid && (email?.dirty || email?.touched))"
+        *ngIf="errorField == 'email'"
       >
-        Email is required
+        {{ errorMessage | titlecase }}
       </div>
     </div>
     <div class="mb-3">
@@ -18,9 +18,9 @@
       <div
         class="alert alert-danger mt-3"
         role="alert"
-        *ngIf="(!hideBtnLogin && resForm.submitted && !name.touched) || (!name?.valid && (name?.dirty || name?.touched))"
+        *ngIf="errorField == 'name'"
       >
-        Name is required
+        {{ errorMessage | titlecase }}
       </div>
     </div>
     <div class="mb-3">
@@ -29,9 +29,9 @@
       <div
         class="alert alert-danger mt-3"
         role="alert"
-        *ngIf="(resForm.submitted && !password.touched) || (!password?.valid && (password?.dirty || password?.touched))"
+        *ngIf="errorField == 'password'"
       >
-        Password is required
+        {{ errorMessage | titlecase }}
       </div>
     </div>
     <div class="mb-3">
@@ -41,15 +41,12 @@
         name="confirm-password"
         class="form-control"
         id="confirm-password"
-        pattern="{{ user.password }}"
-        #cpass="ngModel"
         [(ngModel)]="confirmPassword"
-        required
       >
       <div
         class="alert alert-danger mt-3"
         role="alert"
-        *ngIf="(resForm.submitted && !cpass.touched) || (cpass.errors?.['pattern'] && !cpass?.valid && cpass?.dirty)"
+        *ngIf="errorField == 'confirmPassword'"
       >
         Password and confirm password does not match
       </div>
