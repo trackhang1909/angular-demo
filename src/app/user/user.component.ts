@@ -1,3 +1,9 @@
+import { postsSelector } from './../core/store/post/post.selector';
+import { getPosts } from './../core/store/post/post.actions';
+import { Post } from './../core/models/post.model';
+import { Observable } from 'rxjs';
+import { AppState } from './../core/store/app.state';
+import { Store, select } from '@ngrx/store';
 import { UserService } from './user.service';
 import { User } from './../user';
 import { Component, OnInit } from '@angular/core';
@@ -13,11 +19,19 @@ export class UserComponent implements OnInit {
   firstVisible: any = null
   lastVisible: any = null
   dbInstance = collection(this.firestore, 'users')
+  posts?: Observable<Post[]>
 
-  constructor(private firestore: Firestore, private userService: UserService) { }
+  constructor(private firestore: Firestore, private userService: UserService, private store: Store<AppState>) { }
 
   ngOnInit(): void {
     this.initData()
+
+    this.store.dispatch(getPosts())
+
+    this.posts = this.store.pipe(select(postsSelector))
+    this.posts.subscribe(posts => console.log(posts)
+    )
+
   }
 
   nextPage() {

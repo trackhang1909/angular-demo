@@ -25,6 +25,10 @@ const routes: Routes = [
   {
     path : 'user/:id',
     component: RegisterComponent
+  },
+  {
+    path: 'post',
+    loadChildren: () => import('./post/post.module').then(m => m.PostModule)
   }
 ];
 

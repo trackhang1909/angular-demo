@@ -1,0 +1,20 @@
+<ng-container *ngIf="vm$">
+  <p *ngIf="vm$.isLoading | async">
+    {{ vm$.isLoading|async }}
+  </p>
+  <!-- <ng-template> -->
+    <ng-container *ngIf="vm$.posts | async; else noData">
+      <ng-container *ngFor="let item of vm$.posts | async">
+        <p>{{ item.user.username }}</p>
+      </ng-container>
+    </ng-container>
+    <ng-template #noData>
+      No data
+    </ng-template>
+  <!-- </ng-template> -->
+  <ng-container *ngIf="vm$.post | async">
+    <!-- <ng-container *ngFor="let item of vm$.post | async"> -->
+      <p>Post username: {{ (vm$.post | async)?.user?.username }}</p>
+    <!-- </ng-container> -->
+  </ng-container>
+</ng-container>
